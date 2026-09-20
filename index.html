@@ -607,7 +607,7 @@
       gap: 8px;
     }
 
-    /* ---------------- 4. ЭКРАН ЗАДАНИЯ II (КНИЖНЫЙ ШИФР) ---------------- */
+    /* ---------------- 4. ЭКРАН ЗАДАНИЯ II (ЗАГАДОЧНЫЙ ШИФР) ---------------- */
     #taskScreen2 {
       display: none;
       position: relative;
@@ -621,19 +621,20 @@
     .coords-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin: 18px 0 22px;
+      gap: 10px;
+      margin: 20px 0 24px;
     }
 
     .coord-card {
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(247, 168, 196, 0.25);
-      border-radius: 14px;
-      padding: 10px 6px;
+      border-radius: 16px;
+      padding: 12px 6px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2px;
+      justify-content: center;
+      gap: 4px;
       box-shadow: inset 0 1px 2px rgba(255,255,255,0.06);
       transition: all 0.4s ease;
     }
@@ -643,19 +644,68 @@
       text-transform: uppercase;
       letter-spacing: 0.8px;
       color: var(--accent);
-      font-weight: 600;
+      font-weight: 500;
     }
 
     .coord-val {
       font-family: 'Playfair Display', serif;
-      font-size: 15px;
+      font-size: 20px;
       font-weight: 600;
       color: #ffffff;
+      letter-spacing: 1px;
     }
 
-    .coord-sub {
-      font-size: 10px;
-      color: var(--text-muted);
+    /* Подсказка, появляющаяся после первой ошибки */
+    .hint-trigger-row {
+      display: none;
+      justify-content: center;
+      margin-bottom: 12px;
+      animation: cardAppear 0.4s ease forwards;
+    }
+
+    .need-hint-btn {
+      background: rgba(216, 180, 226, 0.1);
+      border: 1px solid rgba(216, 180, 226, 0.3);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+    }
+
+    .need-hint-btn:active {
+      transform: scale(0.96);
+    }
+
+    .stage2-hint-box {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      background: rgba(216, 180, 226, 0.08);
+      border-left: 2px solid var(--accent);
+      border-radius: 0 10px 10px 0;
+      transition: all 0.35s ease;
+      margin-bottom: 0;
+      text-align: left;
+    }
+
+    .stage2-hint-box.open {
+      max-height: 90px;
+      opacity: 1;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+    }
+
+    .stage2-hint-box p {
+      font-size: 12px;
+      color: #e2d1eb;
+      line-height: 1.45;
+      font-style: italic;
     }
 
     .word-input {
@@ -814,47 +864,53 @@
     </div>
   </div>
 
-  <!-- 4. ЭКРАН ЗАДАНИЯ II (КНИЖНЫЙ ШИФР: СТРОКА / СЛОВО) -->
+  <!-- 4. ЭКРАН ЗАДАНИЯ II (ЗАГАДОЧНЫЙ ШИФР БЕЗ ПРЯМЫХ ПОДСКАЗОК) -->
   <div id="taskScreen2">
     <div class="glass-card" id="taskCard2" style="text-align: center;">
-      <span class="quest-badge">Загадка II • Координаты строк</span>
-      <h2 class="quest-title">Тайные строки</h2>
+      <span class="quest-badge">Загадка II • Координаты</span>
+      <h2 class="quest-title">Тайный ключ</h2>
       <p class="quest-description">
-        Найди ключ — он спрятан в самом начале, там, где начинаются строки... Собери его по координатам <i>(номер строки • номер слова в ней)</i>:
+        Ключ спрятан в самом начале альбома... Попробуй разгадать, на что указывают эти цифры, и собери фразу:
       </p>
 
-      <!-- 6 координат из текста в начале альбома -->
+      <!-- Лаконичные блоки только с цифрами -->
       <div class="coords-grid">
         <div class="coord-card">
-          <span class="coord-index">Слово 1</span>
-          <span class="coord-val">Стрк. 3</span>
-          <span class="coord-sub">сл. 1</span>
+          <span class="coord-index">I</span>
+          <span class="coord-val">3 : 1</span>
         </div>
         <div class="coord-card">
-          <span class="coord-index">Слово 2</span>
-          <span class="coord-val">Стрк. 6</span>
-          <span class="coord-sub">сл. 7</span>
+          <span class="coord-index">II</span>
+          <span class="coord-val">6 : 7</span>
         </div>
         <div class="coord-card">
-          <span class="coord-index">Слово 3</span>
-          <span class="coord-val">Стрк. 4</span>
-          <span class="coord-sub">сл. 8</span>
+          <span class="coord-index">III</span>
+          <span class="coord-val">4 : 8</span>
         </div>
         <div class="coord-card">
-          <span class="coord-index">Слово 4</span>
-          <span class="coord-val">Стрк. 5</span>
-          <span class="coord-sub">сл. 6</span>
+          <span class="coord-index">IV</span>
+          <span class="coord-val">5 : 6</span>
         </div>
         <div class="coord-card">
-          <span class="coord-index">Слово 5</span>
-          <span class="coord-val">Стрк. 5</span>
-          <span class="coord-sub">сл. 7</span>
+          <span class="coord-index">V</span>
+          <span class="coord-val">5 : 7</span>
         </div>
         <div class="coord-card">
-          <span class="coord-index">Слово 6</span>
-          <span class="coord-val">Стрк. 5</span>
-          <span class="coord-sub">сл. 8</span>
+          <span class="coord-index">VI</span>
+          <span class="coord-val">5 : 8</span>
         </div>
+      </div>
+
+      <!-- Кнопка подсказки (появляется только после первой ошибки) -->
+      <div class="hint-trigger-row" id="hintTriggerRow">
+        <button type="button" class="need-hint-btn" id="stage2HintBtn">
+          <span>💡</span> Нужна подсказка?
+        </button>
+      </div>
+
+      <!-- Раскрывающаяся подсказка -->
+      <div class="stage2-hint-box" id="stage2HintBox">
+        <p>Каждая пара цифр — это точные координаты в рукописном тексте: <b>номер строки : номер слова в строке</b>.</p>
       </div>
 
       <div id="cipher2InputWrap">
@@ -937,6 +993,12 @@
     const cipher2InputWrap = document.getElementById("cipher2InputWrap");
     const finalUnlockCard = document.getElementById("finalUnlockCard");
     const finalOpenBtn = document.getElementById("finalOpenBtn");
+
+    const hintTriggerRow = document.getElementById("hintTriggerRow");
+    const stage2HintBtn = document.getElementById("stage2HintBtn");
+    const stage2HintBox = document.getElementById("stage2HintBox");
+
+    let stage2Mistakes = 0;
 
     loginHintBtn.addEventListener("click", () => loginHint.classList.toggle("open"));
     passHintBtn.addEventListener("click", () => passHint.classList.toggle("open"));
@@ -1055,6 +1117,11 @@
       }, 500);
     });
 
+    // Управление подсказкой 2-го этапа
+    stage2HintBtn.addEventListener("click", () => {
+      stage2HintBox.classList.toggle("open");
+    });
+
     function checkCipher2() {
       const enteredWord = cipher2Input.value.trim().toUpperCase().replace(/Ё/g, 'Е').replace(/[^А-ЯA-Z]/g, '');
       const cleanTarget = VALID_CIPHER_2.toUpperCase().replace(/Ё/g, 'Е').replace(/[^А-ЯA-Z]/g, '');
@@ -1066,10 +1133,12 @@
         cipher2Input.blur();
         cipher2InputWrap.style.transition = "opacity 0.4s ease";
         cipher2InputWrap.style.opacity = "0";
+        hintTriggerRow.style.display = "none";
+        stage2HintBox.style.display = "none";
 
         setTimeout(() => {
           cipher2InputWrap.style.display = "none";
-          document.querySelectorAll(".coord-card").forEach(c => {
+          document.querySelectorAll("#taskScreen2 .coord-card").forEach(c => {
             c.style.borderColor = "#ffd700";
             c.style.boxShadow = "0 0 15px rgba(255, 215, 0, 0.25)";
           });
@@ -1077,10 +1146,16 @@
         }, 400);
 
       } else {
+        stage2Mistakes++;
         cipher2Input.classList.add("error");
-        cipher2ErrorMsg.textContent = "Не совпадает. Проверь номер строки и слова";
+        cipher2ErrorMsg.textContent = "Не совпадает. Попробуй еще раз";
         taskCard2.classList.add("shake");
         setTimeout(() => taskCard2.classList.remove("shake"), 400);
+
+        // После первой же ошибки открываем доступ к кнопке подсказки
+        if (stage2Mistakes >= 1) {
+          hintTriggerRow.style.display = "flex";
+        }
       }
     }
 
