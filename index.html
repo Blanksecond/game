@@ -16,6 +16,7 @@
       --text: #f4f4f6;
       --text-muted: #8b8b99;
       --accent: #d8b4e2;
+      --pink-glow: rgba(247, 168, 196, 0.35);
       --error: #ff5c5c;
     }
 
@@ -38,7 +39,7 @@
       position: relative;
     }
 
-    /* Фоновые градиенты */
+    /* Фоновые мягкие световые пятна */
     .glow-bg {
       position: fixed;
       inset: 0;
@@ -51,8 +52,8 @@
       position: absolute;
       top: -10%;
       left: 20%;
-      width: 320px;
-      height: 320px;
+      width: 340px;
+      height: 340px;
       background: radial-gradient(circle, rgba(147, 98, 222, 0.28) 0%, transparent 70%);
       filter: blur(60px);
     }
@@ -61,10 +62,26 @@
       position: absolute;
       bottom: 5%;
       right: 15%;
-      width: 350px;
-      height: 350px;
+      width: 360px;
+      height: 360px;
       background: radial-gradient(circle, rgba(235, 120, 160, 0.22) 0%, transparent 70%);
       filter: blur(70px);
+    }
+
+    /* Общий базовый стиль для обеих карточек */
+    .glass-card {
+      width: 100%;
+      max-width: 370px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 34px 24px;
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8),
+                  inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      position: relative;
+      z-index: 10;
     }
 
     /* ---------------- 1. ЭКРАН АВТОРИЗАЦИИ ---------------- */
@@ -74,28 +91,15 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 24px;
+      padding: 20px;
       z-index: 100;
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     #auth-screen.fade-out {
       opacity: 0;
       transform: scale(1.05);
       pointer-events: none;
-    }
-
-    .auth-card {
-      width: 100%;
-      max-width: 360px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 28px;
-      padding: 36px 26px;
-      backdrop-filter: blur(30px);
-      -webkit-backdrop-filter: blur(30px);
-      box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8),
-                  inset 0 1px 1px rgba(255, 255, 255, 0.15);
     }
 
     .header-area {
@@ -121,6 +125,7 @@
       font-size: 13px;
       color: var(--text-muted);
       margin-top: 8px;
+      font-weight: 300;
     }
 
     .field-group {
@@ -132,10 +137,11 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 8px;
+      padding: 0 2px;
     }
 
     label {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 500;
       color: rgba(255, 255, 255, 0.7);
       text-transform: uppercase;
@@ -182,6 +188,7 @@
       border-radius: 16px;
       color: #ffffff;
       font-size: 15px;
+      font-family: inherit;
       padding: 0 16px;
       outline: none;
       transition: all 0.25s ease;
@@ -208,7 +215,8 @@
       font-weight: 600;
       cursor: pointer;
       margin-top: 10px;
-      transition: transform 0.15s ease;
+      box-shadow: 0 10px 25px -5px rgba(216, 180, 226, 0.3);
+      transition: all 0.2s ease;
     }
 
     .submit-btn:active {
@@ -233,84 +241,83 @@
       animation: cardShake 0.4s ease;
     }
 
-    /* ---------------- 2. ЭКРАН СО ШКАТУЛКОЙ ---------------- */
-    /* ВАЖНО: display: none по умолчанию! */
+    /* ---------------- 2. ЭКРАН ШКАТУЛКИ (СТРОГО СКРЫТ) ---------------- */
     #questScreen {
-      display: none;
+      display: none; /* скрыт до авторизации */
       position: relative;
       z-index: 10;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
+      padding: 20px;
       width: 100%;
-      max-width: 380px;
-      padding: 24px;
-      animation: fadeIn 0.8s ease forwards;
+      justify-content: center;
+      align-items: center;
+      animation: screenFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes screenFadeIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     .quest-badge {
       display: inline-block;
       font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
+      letter-spacing: 1.2px;
       color: #f7a8c4;
       background: rgba(247, 168, 196, 0.12);
       border: 1px solid rgba(247, 168, 196, 0.25);
-      padding: 5px 12px;
+      padding: 4px 12px;
       border-radius: 20px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
+      font-weight: 500;
     }
 
     .quest-title {
       font-family: 'Playfair Display', serif;
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 500;
       color: #ffffff;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
+      line-height: 1.3;
     }
 
     .quest-description {
-      font-size: 13.5px;
+      font-size: 13px;
       line-height: 1.6;
-      color: #a8a8b3;
+      color: var(--text-muted);
       font-weight: 300;
-      margin-bottom: 18px;
-      padding: 0 8px;
+      margin-bottom: 16px;
     }
 
     .quest-hint-bar {
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.03);
       border: 1px dashed rgba(247, 168, 196, 0.3);
       border-radius: 12px;
-      padding: 8px 16px;
+      padding: 8px 12px;
       font-size: 12px;
       color: #ffd1dc;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
+      text-align: center;
     }
 
-    /* Шкатулка */
+    /* Сцена шкатулки */
     .box-stage {
       position: relative;
-      width: 240px;
-      height: 180px;
+      width: 200px;
+      height: 155px;
+      margin: 0 auto 22px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 24px;
     }
 
     .glow-pedestal {
       position: absolute;
-      bottom: 10px;
-      width: 190px;
-      height: 35px;
-      background: radial-gradient(ellipse at center, rgba(247, 168, 196, 0.35) 0%, transparent 70%);
-      filter: blur(12px);
+      bottom: 6px;
+      width: 170px;
+      height: 30px;
+      background: radial-gradient(ellipse at center, var(--pink-glow) 0%, transparent 70%);
+      filter: blur(10px);
       z-index: 1;
     }
 
@@ -318,88 +325,103 @@
       position: relative;
       z-index: 2;
       cursor: pointer;
+      transition: transform 0.2s ease;
     }
 
+    .jewelry-box:active {
+      transform: scale(0.97);
+    }
+
+    /* Крышка шкатулки */
     .box-lid {
-      width: 170px;
-      height: 48px;
+      width: 150px;
+      height: 42px;
       background: linear-gradient(180deg, #fbb6ce 0%, #f48fb1 100%);
-      border-radius: 16px 16px 4px 4px;
-      box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.5), 0 6px 12px rgba(0, 0, 0, 0.25);
+      border-radius: 14px 14px 3px 3px;
+      box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.6),
+                  0 6px 12px rgba(0, 0, 0, 0.3);
       position: relative;
       margin: 0 auto;
       z-index: 4;
     }
 
+    /* Основание шкатулки */
     .box-base {
-      width: 158px;
-      height: 84px;
+      width: 140px;
+      height: 74px;
       background: linear-gradient(180deg, #ec729c 0%, #d85785 100%);
-      border-radius: 4px 4px 18px 18px;
+      border-radius: 3px 3px 16px 16px;
       margin: -2px auto 0;
       position: relative;
-      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.3), 0 18px 30px rgba(0, 0, 0, 0.5);
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.3),
+                  0 16px 28px rgba(0, 0, 0, 0.5);
       display: flex;
       justify-content: center;
       z-index: 3;
     }
 
+    /* Шелковая лента */
     .lid-ribbon, .base-ribbon {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      width: 22px;
+      width: 18px;
       background: linear-gradient(90deg, #fff0f5 0%, #ffe4e1 100%);
+      box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
     }
+
     .lid-ribbon { height: 100%; top: 0; }
     .base-ribbon { height: 100%; top: 0; }
 
+    /* Золотой навесной замок */
     .gold-lock {
       position: absolute;
-      top: -12px;
+      top: -10px;
       display: flex;
       flex-direction: column;
       align-items: center;
       z-index: 10;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.35));
     }
 
     .lock-shackle {
-      width: 18px;
-      height: 14px;
-      border: 3.5px solid #ffd700;
+      width: 16px;
+      height: 12px;
+      border: 3px solid #ffd700;
       border-bottom: none;
-      border-radius: 10px 10px 0 0;
+      border-radius: 8px 8px 0 0;
       margin-bottom: -2px;
     }
 
     .lock-body {
-      width: 26px;
-      height: 22px;
+      width: 24px;
+      height: 20px;
       background: linear-gradient(135deg, #ffe066 0%, #d4af37 100%);
-      border-radius: 5px;
+      border-radius: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
+      border: 1px solid #fff2a3;
     }
 
     .keyhole {
-      width: 4px;
-      height: 7px;
+      width: 3.5px;
+      height: 6px;
       background: #5c4400;
       border-radius: 2px;
     }
 
     .gold-lock.rattle {
-      animation: lockShake 0.4s ease;
+      animation: lockRattle 0.4s ease;
     }
 
-    @keyframes lockShake {
+    @keyframes lockRattle {
       0%, 100% { transform: rotate(0deg); }
-      25% { transform: rotate(-10deg) scale(1.05); }
-      75% { transform: rotate(10deg) scale(1.05); }
+      25% { transform: rotate(-10deg) scale(1.06); }
+      75% { transform: rotate(10deg) scale(1.06); }
     }
 
+    /* Кнопка запуска квеста */
     .quest-start-btn {
       width: 100%;
       height: 52px;
@@ -409,8 +431,18 @@
       border-radius: 16px;
       font-size: 15px;
       font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       cursor: pointer;
       box-shadow: 0 10px 25px -4px rgba(234, 122, 159, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .quest-start-btn:active {
+      transform: scale(0.98);
+      box-shadow: 0 5px 15px -3px rgba(234, 122, 159, 0.3);
     }
   </style>
 </head>
@@ -424,7 +456,7 @@
 
   <!-- 1. Экран входа -->
   <div id="auth-screen">
-    <div class="auth-card" id="card">
+    <div class="glass-card" id="card">
       <div class="header-area">
         <div class="sparkle-icon">✨</div>
         <h1>Доступ только для одного особенного человека</h1>
@@ -439,7 +471,7 @@
         <div class="hint-bubble" id="loginHint">
           <p>Как я тебя называю, когда желаю сладких снов?</p>
         </div>
-        <input type="text" id="login" placeholder="Введи имя..." autocomplete="off">
+        <input type="text" id="login" placeholder="Введи имя..." autocomplete="off" autocorrect="off" autocapitalize="off">
       </div>
 
       <div class="field-group">
@@ -458,37 +490,44 @@
     </div>
   </div>
 
-  <!-- 2. Экран шкатулки (скрыт до правильного ввода) -->
+  <!-- 2. Экран шкатулки (в точно такой же стеклянной карточке, скрыт до авторизации) -->
   <div id="questScreen">
-    <span class="quest-badge">Уровень I • Квест памяти</span>
-    <h2 class="quest-title">Шкатулка с секретом</h2>
-    <p class="quest-description">
-      Полгода разлуки не прошли бесследно: внутри этой шкатулки спрятано то, что бережно собиралось всё это время. 
-      Но открыть её просто так не получится — механизм защищён шифрами, ответы на которые знаешь только ты.
-    </p>
-    <div class="quest-hint-bar">
-      <span>✨ Отгадай все коды, чтобы сбросить замок</span>
-    </div>
+    <div class="glass-card" style="text-align: center;">
+      <span class="quest-badge">Уровень I • Квест памяти</span>
+      <h2 class="quest-title">Шкатулка с секретом</h2>
+      <p class="quest-description">
+        Внутри спрятано то, что бережно собиралось все эти полгода. Но механизм защищён шифрами, ответы на которые знаешь только ты.
+      </p>
 
-    <div class="box-stage">
-      <div class="glow-pedestal"></div>
-      <div class="jewelry-box" id="jewelryBox">
-        <div class="box-lid">
-          <div class="lid-ribbon"></div>
-        </div>
-        <div class="box-base">
-          <div class="base-ribbon"></div>
-          <div class="gold-lock" id="goldLock">
-            <div class="lock-shackle"></div>
-            <div class="lock-body">
-              <div class="keyhole"></div>
+      <div class="quest-hint-bar">
+        <span>✨ Отгадай все коды, чтобы сбросить замок</span>
+      </div>
+
+      <div class="box-stage">
+        <div class="glow-pedestal"></div>
+        <div class="jewelry-box" id="jewelryBox">
+          <div class="box-lid">
+            <div class="lid-ribbon"></div>
+          </div>
+          <div class="box-base">
+            <div class="base-ribbon"></div>
+            <div class="gold-lock" id="goldLock">
+              <div class="lock-shackle"></div>
+              <div class="lock-body">
+                <div class="keyhole"></div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <button type="button" class="quest-start-btn" id="startQuestBtn">Начать испытание</button>
+      <button type="button" class="quest-start-btn" id="startQuestBtn">
+        Начать испытание
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
   </div>
 
   <script>
@@ -508,11 +547,11 @@
     const loginHint = document.getElementById("loginHint");
     const passHint = document.getElementById("passHint");
 
-    // Подсказки
+    // Раскрытие подсказок
     loginHintBtn.addEventListener("click", () => loginHint.classList.toggle("open"));
     passHintBtn.addEventListener("click", () => passHint.classList.toggle("open"));
 
-    // Проверка авторизации
+    // Проверка логина и пароля
     function attemptLogin() {
       const enteredLogin = loginInput.value.trim().toLowerCase();
       const enteredPassword = passInput.value.trim();
@@ -522,14 +561,11 @@
       errorMsg.textContent = "";
 
       if (enteredLogin === VALID_LOGIN && enteredPassword === VALID_PASSWORD) {
-        // 1. Скрываем клавиатуру
         loginInput.blur();
         passInput.blur();
 
-        // 2. Растворяем форму авторизации
         authScreen.classList.add("fade-out");
 
-        // 3. Через 500мс полностью убираем авторизацию и показываем шкатулку
         setTimeout(() => {
           authScreen.style.display = "none";
           questScreen.style.display = "flex";
@@ -550,7 +586,7 @@
       inp.addEventListener("keydown", (e) => { if (e.key === "Enter") attemptLogin(); });
     });
 
-    // Анимация тряски замка на шкатулке
+    // Реакция на клик по шкатулке
     const lock = document.getElementById('goldLock');
     const box = document.getElementById('jewelryBox');
     box.addEventListener('click', () => {
@@ -560,250 +596,4 @@
     });
   </script>
 </body>
-</html>        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Кнопка перехода к первому шифру -->
-  <button type="button" class="quest-start-btn" id="startQuestBtn">
-    Начать испытание
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M5 12h14M12 5l7 7-7 7"/>
-    </svg>
-  </button>
-</div>
-
-<style>
-  /* Стили для экрана квеста */
-  .quest-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    width: 100%;
-    max-width: 380px;
-    margin: 0 auto;
-    animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .quest-badge {
-    display: inline-block;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: #f7a8c4;
-    background: rgba(247, 168, 196, 0.12);
-    border: 1px solid rgba(247, 168, 196, 0.25);
-    padding: 5px 12px;
-    border-radius: 20px;
-    margin-bottom: 14px;
-    font-weight: 500;
-  }
-
-  .quest-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    font-weight: 500;
-    color: #ffffff;
-    margin-bottom: 12px;
-  }
-
-  .quest-description {
-    font-size: 13.5px;
-    line-height: 1.6;
-    color: #a8a8b3;
-    font-weight: 300;
-    margin-bottom: 18px;
-    padding: 0 10px;
-  }
-
-  .quest-hint-bar {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px dashed rgba(247, 168, 196, 0.3);
-    border-radius: 12px;
-    padding: 8px 16px;
-    font-size: 12px;
-    color: #ffd1dc;
-    margin-bottom: 28px;
-  }
-
-  /* Сцена шкатулки и пьедестал */
-  .box-stage {
-    position: relative;
-    width: 240px;
-    height: 190px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 28px;
-  }
-
-  .glow-pedestal {
-    position: absolute;
-    bottom: 10px;
-    width: 190px;
-    height: 35px;
-    background: radial-gradient(ellipse at center, rgba(247, 168, 196, 0.35) 0%, transparent 70%);
-    filter: blur(12px);
-    z-index: 1;
-  }
-
-  /* Сама розовая шкатулка */
-  .jewelry-box {
-    position: relative;
-    z-index: 2;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-  }
-
-  .jewelry-box:active {
-    transform: scale(0.97);
-  }
-
-  /* Крышка */
-  .box-lid {
-    width: 170px;
-    height: 48px;
-    background: linear-gradient(180deg, #fbb6ce 0%, #f48fb1 100%);
-    border-radius: 16px 16px 4px 4px;
-    box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.5),
-                0 6px 12px rgba(0, 0, 0, 0.25);
-    position: relative;
-    margin: 0 auto;
-    z-index: 4;
-  }
-
-  /* Основание */
-  .box-base {
-    width: 158px;
-    height: 84px;
-    background: linear-gradient(180deg, #ec729c 0%, #d85785 100%);
-    border-radius: 4px 4px 18px 18px;
-    margin: -2px auto 0;
-    position: relative;
-    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.3),
-                0 18px 30px rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    z-index: 3;
-  }
-
-  /* Нежная вертикальная лента */
-  .lid-ribbon, .base-ribbon {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 22px;
-    background: linear-gradient(90deg, #fff0f5 0%, #ffe4e1 100%);
-    box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
-  }
-
-  .lid-ribbon {
-    height: 100%;
-    top: 0;
-  }
-
-  .base-ribbon {
-    height: 100%;
-    top: 0;
-  }
-
-  /* Золотой замок */
-  .gold-lock {
-    position: absolute;
-    top: -12px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    z-index: 10;
-    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
-    transition: transform 0.2s ease;
-  }
-
-  .lock-shackle {
-    width: 18px;
-    height: 14px;
-    border: 3.5px solid #ffd700;
-    border-bottom: none;
-    border-radius: 10px 10px 0 0;
-    margin-bottom: -2px;
-  }
-
-  .lock-body {
-    width: 26px;
-    height: 22px;
-    background: linear-gradient(135deg, #ffe066 0%, #d4af37 100%);
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #fff2a3;
-  }
-
-  .keyhole {
-    width: 4px;
-    height: 7px;
-    background: #5c4400;
-    border-radius: 2px;
-  }
-
-  /* Анимация щелчка по замку (он заперт) */
-  .gold-lock.rattle {
-    animation: lockShake 0.4s ease;
-  }
-
-  @keyframes lockShake {
-    0%, 100% { transform: rotate(0deg); }
-    25% { transform: rotate(-10deg) scale(1.05); }
-    75% { transform: rotate(10deg) scale(1.05); }
-  }
-
-  /* Кнопка старта квеста */
-  .quest-start-btn {
-    width: 100%;
-    height: 52px;
-    background: linear-gradient(135deg, #f7a8c4 0%, #ea7a9f 100%);
-    color: #ffffff;
-    border: none;
-    border-radius: 16px;
-    font-size: 15px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    cursor: pointer;
-    box-shadow: 0 10px 25px -4px rgba(234, 122, 159, 0.4);
-    transition: all 0.2s ease;
-  }
-
-  .quest-start-btn:active {
-    transform: scale(0.98);
-  }
-</style>
-
-<script>
-  // Интерактив при тапе на замок или шкатулку
-  const lock = document.getElementById('goldLock');
-  const box = document.getElementById('jewelryBox');
-  const startQuestBtn = document.getElementById('startQuestBtn');
-
-  function rattleLock() {
-    lock.classList.remove('rattle');
-    void lock.offsetWidth; // перезапуск анимации
-    lock.classList.add('rattle');
-  }
-
-  box.addEventListener('click', rattleLock);
-  
-  startQuestBtn.addEventListener('click', () => {
-    console.log("Переход к первому шифру/загадке");
-    // Здесь запускаем первый вопрос или экран с вводом шифра
-  });
-</script>
+</html>
