@@ -2,53 +2,304 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>✨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Private Space</title>
   <style>
-    body {
+    :root {
+      --bg: #0d0d0e;
+      --card-bg: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.1);
+      --accent: #f5f5f7;
+      --error: #ff453a;
+      --hint: #8e8e93;
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--accent);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       min-height: 100vh;
-      background: #121212;
-      color: #eaeaea;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    /* Экран авторизации */
+    #auth-screen {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, #1a1a1c 0%, #0d0d0e 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      text-align: center;
       padding: 24px;
-      box-sizing: border-box;
+      z-index: 1000;
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .card {
-      max-width: 320px;
+
+    #auth-screen.unlocked {
+      opacity: 0;
+      transform: scale(1.05);
+      pointer-events: none;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 360px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 24px;
       padding: 32px 24px;
-      border: 1px solid #2a2a2a;
-      border-radius: 20px;
-      background: #181818;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
     }
-    .icon {
-      font-size: 36px;
-      margin-bottom: 16px;
+
+    .header-area {
+      text-align: center;
+      margin-bottom: 28px;
     }
+
+    .lock-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+      margin-bottom: 14px;
+      font-size: 22px;
+    }
+
     h1 {
       font-size: 20px;
       font-weight: 600;
-      margin-bottom: 12px;
-      color: #fff;
+      letter-spacing: 0.3px;
     }
-    p {
-      font-size: 14px;
-      line-height: 1.5;
-      color: #888;
-      margin: 0;
+
+    .subtitle {
+      font-size: 13px;
+      color: var(--hint);
+      margin-top: 6px;
+    }
+
+    /* Поля формы */
+    .field-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .hint-btn {
+      background: none;
+      border: none;
+      color: #9a9aff;
+      font-size: 12px;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .hint-text {
+      font-size: 12px;
+      color: #b0b0b8;
+      background: rgba(255, 255, 255, 0.06);
+      border-left: 2px solid #9a9aff;
+      padding: 8px 10px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      display: none;
+      line-height: 1.4;
+    }
+
+    .hint-text.active {
+      display: block;
+    }
+
+    input {
+      width: 100%;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 15px;
+      padding: 0 14px;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    input:focus {
+      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    input.error {
+      border-color: var(--error);
+      background: rgba(255, 69, 58, 0.08);
+    }
+
+    .submit-btn {
+      width: 100%;
+      height: 50px;
+      background: #fdfbf7;
+      color: #121212;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: transform 0.1s ease, opacity 0.2s ease;
+    }
+
+    .submit-btn:active {
+      transform: scale(0.97);
+      opacity: 0.9;
+    }
+
+    /* Ошибка и анимация тряски */
+    .error-msg {
+      color: var(--error);
+      font-size: 13px;
+      text-align: center;
+      margin-top: 14px;
+      min-height: 18px;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-10px); }
+      40%, 80% { transform: translateX(10px); }
+    }
+
+    .shake {
+      animation: shake 0.4s ease;
+    }
+
+    /* Защищённый блок */
+    #main-content {
+      text-align: center;
+      max-width: 360px;
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="icon">⏳</div>
-    <h1>Эта страница пока спит</h1>
-    <p>Кажется, ты открыла её чуть раньше времени. Загляни сюда немного позже ✨</p>
+
+  <!-- Экран входа -->
+  <div id="auth-screen">
+    <div class="auth-card" id="card">
+      <div class="header-area">
+        <div class="lock-badge">🔒</div>
+        <h1>Доступ ограничен</h1>
+        <div class="subtitle">Только для одного конкретного человека</div>
+      </div>
+
+      <!-- Поле логина -->
+      <div class="field-group">
+        <div class="label-row">
+          <label for="login">Логин</label>
+          <button type="button" class="hint-btn" id="loginHintBtn">Подсказка</button>
+        </div>
+        <div class="hint-text" id="loginHint">Как я тебя называю, когда желаю сладких снов?</div>
+        <input type="text" id="login" placeholder="Введи ответ" autocomplete="off" autocorrect="off" autocapitalize="off">
+      </div>
+
+      <!-- Поле пароля -->
+      <div class="field-group">
+        <div class="label-row">
+          <label for="password">Пароль</label>
+          <button type="button" class="hint-btn" id="passHintBtn">Подсказка</button>
+        </div>
+        <div class="hint-text" id="passHint">Пароль от твоего телефона</div>
+        <input type="password" id="password" inputmode="numeric" placeholder="••••" autocomplete="off">
+      </div>
+
+      <button type="button" class="submit-btn" id="submitBtn">Войти</button>
+      <div class="error-msg" id="errorMsg"></div>
+    </div>
   </div>
+
+  <!-- Главный контент (сюда встанет фотоаппарат / галерея) -->
+  <main id="main-content">
+    <h2>Привет, Малышка ✨</h2>
+    <p style="margin-top: 10px; color: #888; font-size: 15px; line-height: 1.6;">
+      Ты успешно вошла. Дальше начинается самое интересное...
+    </p>
+  </main>
+
+  <script>
+    const VALID_LOGIN = "малышка";
+    const VALID_PASSWORD = "2712";
+
+    const authScreen = document.getElementById("auth-screen");
+    const card = document.getElementById("card");
+    const loginInput = document.getElementById("login");
+    const passInput = document.getElementById("password");
+    const submitBtn = document.getElementById("submitBtn");
+    const errorMsg = document.getElementById("errorMsg");
+
+    const loginHintBtn = document.getElementById("loginHintBtn");
+    const passHintBtn = document.getElementById("passHintBtn");
+    const loginHint = document.getElementById("loginHint");
+    const passHint = document.getElementById("passHint");
+
+    // Переключение подсказок
+    loginHintBtn.addEventListener("click", () => loginHint.classList.toggle("active"));
+    passHintBtn.addEventListener("click", () => passHint.classList.toggle("active"));
+
+    // Проверка данных
+    function attemptLogin() {
+      // Приводим к нижнему регистру и обрезаем пробелы по краям
+      const enteredLogin = loginInput.value.trim().toLowerCase();
+      const enteredPassword = passInput.value.trim();
+
+      loginInput.classList.remove("error");
+      passInput.classList.remove("error");
+      errorMsg.textContent = "";
+
+      if (enteredLogin === VALID_LOGIN && enteredPassword === VALID_PASSWORD) {
+        // Успешный вход
+        authScreen.classList.add("unlocked");
+      } else {
+        // Ошибка ввода
+        if (enteredLogin !== VALID_LOGIN) loginInput.classList.add("error");
+        if (enteredPassword !== VALID_PASSWORD) passInput.classList.add("error");
+
+        errorMsg.textContent = "Неверный логин или пароль";
+        card.classList.add("shake");
+        setTimeout(() => card.classList.remove("shake"), 400);
+      }
+    }
+
+    submitBtn.addEventListener("click", attemptLogin);
+
+    // Поддержка нажатия Enter на мобильной клавиатуре
+    passInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") attemptLogin();
+    });
+  </script>
 </body>
 </html>
