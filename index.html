@@ -6,7 +6,7 @@
   <title>Only for you ✨</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #09090b;
@@ -39,7 +39,7 @@
       position: relative;
     }
 
-    /* Фоновые мягкие световые пятна */
+    /* Фоновые мягкие пятна */
     .glow-bg {
       position: fixed;
       inset: 0;
@@ -68,7 +68,7 @@
       filter: blur(70px);
     }
 
-    /* Общий базовый стиль для обеих карточек */
+    /* Базовая стеклянная карточка */
     .glass-card {
       width: 100%;
       max-width: 370px;
@@ -84,6 +84,22 @@
       z-index: 10;
     }
 
+    .screen-fade-out {
+      opacity: 0 !important;
+      transform: scale(0.96) translateY(-10px) !important;
+      pointer-events: none !important;
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    .screen-fade-in {
+      animation: cardAppear 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes cardAppear {
+      from { opacity: 0; transform: translateY(20px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
     /* ---------------- 1. ЭКРАН АВТОРИЗАЦИИ ---------------- */
     #auth-screen {
       position: fixed;
@@ -93,13 +109,6 @@
       align-items: center;
       padding: 20px;
       z-index: 100;
-      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    #auth-screen.fade-out {
-      opacity: 0;
-      transform: scale(1.05);
-      pointer-events: none;
     }
 
     .header-area {
@@ -241,21 +250,15 @@
       animation: cardShake 0.4s ease;
     }
 
-    /* ---------------- 2. ЭКРАН ШКАТУЛКИ (СТРОГО СКРЫТ) ---------------- */
+    /* ---------------- 2. ЭКРАН ШКАТУЛКИ ---------------- */
     #questScreen {
-      display: none; /* скрыт до авторизации */
+      display: none;
       position: relative;
       z-index: 10;
       padding: 20px;
       width: 100%;
       justify-content: center;
       align-items: center;
-      animation: screenFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    @keyframes screenFadeIn {
-      from { opacity: 0; transform: translateY(20px) scale(0.98); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     .quest-badge {
@@ -300,7 +303,6 @@
       text-align: center;
     }
 
-    /* Сцена шкатулки */
     .box-stage {
       position: relative;
       width: 200px;
@@ -332,20 +334,17 @@
       transform: scale(0.97);
     }
 
-    /* Крышка шкатулки */
     .box-lid {
       width: 150px;
       height: 42px;
       background: linear-gradient(180deg, #fbb6ce 0%, #f48fb1 100%);
       border-radius: 14px 14px 3px 3px;
-      box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.6),
-                  0 6px 12px rgba(0, 0, 0, 0.3);
+      box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.6), 0 6px 12px rgba(0, 0, 0, 0.3);
       position: relative;
       margin: 0 auto;
       z-index: 4;
     }
 
-    /* Основание шкатулки */
     .box-base {
       width: 140px;
       height: 74px;
@@ -353,27 +352,22 @@
       border-radius: 3px 3px 16px 16px;
       margin: -2px auto 0;
       position: relative;
-      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.3),
-                  0 16px 28px rgba(0, 0, 0, 0.5);
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.3), 0 16px 28px rgba(0, 0, 0, 0.5);
       display: flex;
       justify-content: center;
       z-index: 3;
     }
 
-    /* Шелковая лента */
     .lid-ribbon, .base-ribbon {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
       width: 18px;
       background: linear-gradient(90deg, #fff0f5 0%, #ffe4e1 100%);
-      box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
     }
-
     .lid-ribbon { height: 100%; top: 0; }
     .base-ribbon { height: 100%; top: 0; }
 
-    /* Золотой навесной замок */
     .gold-lock {
       position: absolute;
       top: -10px;
@@ -421,7 +415,6 @@
       75% { transform: rotate(10deg) scale(1.06); }
     }
 
-    /* Кнопка запуска квеста */
     .quest-start-btn {
       width: 100%;
       height: 52px;
@@ -440,9 +433,128 @@
       transition: all 0.2s ease;
     }
 
-    .quest-start-btn:active {
-      transform: scale(0.98);
-      box-shadow: 0 5px 15px -3px rgba(234, 122, 159, 0.3);
+    /* ---------------- 3. ЭКРАН ЗАДАНИЯ (ШИФР) ---------------- */
+    #taskScreen {
+      display: none;
+      position: relative;
+      z-index: 10;
+      padding: 20px;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Плашки страниц дневника */
+    .cipher-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0 24px;
+    }
+
+    .page-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(247, 168, 196, 0.3);
+      padding: 8px 12px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 58px;
+      box-shadow: inset 0 1px 2px rgba(255,255,255,0.1);
+    }
+
+    .page-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--accent);
+      margin-bottom: 2px;
+    }
+
+    .page-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: 1px;
+    }
+
+    /* Поле для ответа на шифр */
+    .cipher-input {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      height: 54px;
+      border-radius: 16px;
+    }
+
+    /* ---------------- АНИМАЦИЯ VELO -> LOVE ---------------- */
+    .anagram-stage {
+      display: none;
+      height: 110px;
+      position: relative;
+      width: 100%;
+      margin: 15px 0 20px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .letter-tile {
+      position: absolute;
+      width: 54px;
+      height: 64px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(247, 168, 196, 0.4);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 600;
+      color: #ffffff;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+      transition: transform 1.3s cubic-bezier(0.68, -0.3, 0.265, 1.3), 
+                  border-color 0.8s ease, 
+                  box-shadow 0.8s ease,
+                  color 0.8s ease;
+    }
+
+    /* Начальные позиции VELO (центрированы, шаг 62px) */
+    .pos-0 { transform: translateX(-93px); }
+    .pos-1 { transform: translateX(-31px); }
+    .pos-2 { transform: translateX(31px); }
+    .pos-3 { transform: translateX(93px); }
+
+    /* Конечные позиции для слова LOVE:
+       Буква L (tile-2) -> на позицию 0 (-93px)
+       Буква O (tile-3) -> на позицию 1 (-31px)
+       Буква V (tile-0) -> на позицию 2 (31px)
+       Буква E (tile-1) -> на позицию 3 (93px)
+    */
+    .tile-love-l { transform: translateX(-93px) translateY(-4px) !important; }
+    .tile-love-o { transform: translateX(-31px) translateY(4px) !important; }
+    .tile-love-v { transform: translateX(31px) translateY(-4px) !important; }
+    .tile-love-e { transform: translateX(93px) translateY(4px) !important; }
+
+    /* Неоновое свечение LOVE после перестановки */
+    .tile-glow {
+      border-color: #f7a8c4 !important;
+      color: #ffd6e4 !important;
+      box-shadow: 0 0 25px rgba(247, 168, 196, 0.55), inset 0 0 8px rgba(255, 255, 255, 0.3) !important;
+    }
+
+    .success-text {
+      display: none;
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      color: #f7a8c4;
+      text-align: center;
+      margin-top: 10px;
+      animation: cardAppear 0.8s ease forwards;
     }
   </style>
 </head>
@@ -454,7 +566,7 @@
     <div class="blob-2"></div>
   </div>
 
-  <!-- 1. Экран входа -->
+  <!-- 1. ЭКРАН ВХОДА -->
   <div id="auth-screen">
     <div class="glass-card" id="card">
       <div class="header-area">
@@ -490,9 +602,9 @@
     </div>
   </div>
 
-  <!-- 2. Экран шкатулки (в точно такой же стеклянной карточке, скрыт до авторизации) -->
+  <!-- 2. ЭКРАН ШКАТУЛКИ -->
   <div id="questScreen">
-    <div class="glass-card" style="text-align: center;">
+    <div class="glass-card" id="questCard" style="text-align: center;">
       <span class="quest-badge">Уровень I • Квест памяти</span>
       <h2 class="quest-title">Шкатулка с секретом</h2>
       <p class="quest-description">
@@ -506,16 +618,12 @@
       <div class="box-stage">
         <div class="glow-pedestal"></div>
         <div class="jewelry-box" id="jewelryBox">
-          <div class="box-lid">
-            <div class="lid-ribbon"></div>
-          </div>
+          <div class="box-lid"><div class="lid-ribbon"></div></div>
           <div class="box-base">
             <div class="base-ribbon"></div>
             <div class="gold-lock" id="goldLock">
               <div class="lock-shackle"></div>
-              <div class="lock-body">
-                <div class="keyhole"></div>
-              </div>
+              <div class="lock-body"><div class="keyhole"></div></div>
             </div>
           </div>
         </div>
@@ -530,28 +638,102 @@
     </div>
   </div>
 
+  <!-- 3. ЭКРАН ЗАДАНИЯ (ШИФР ИЗ ДНЕВНИКА) -->
+  <div id="taskScreen">
+    <div class="glass-card" id="taskCard" style="text-align: center;">
+      <span class="quest-badge">Загадка I • Послание в страницах</span>
+      <h2 class="quest-title">Шифр дневника</h2>
+      <p class="quest-description">
+        Загляни в свой дневник. На указанных страницах тебя ждут спрятанные символы. Найди их и введи полученное слово:
+      </p>
+
+      <!-- Шифр страниц -->
+      <div class="cipher-container">
+        <div class="page-pill">
+          <span class="page-label">стр.</span>
+          <span class="page-num">20</span>
+        </div>
+        <div class="page-pill">
+          <span class="page-label">стр.</span>
+          <span class="page-num">23</span>
+        </div>
+        <div class="page-pill">
+          <span class="page-label">стр.</span>
+          <span class="page-num">25</span>
+        </div>
+        <div class="page-pill">
+          <span class="page-label">стр.</span>
+          <span class="page-num">03</span>
+        </div>
+      </div>
+
+      <!-- Поле ввода ответа -->
+      <div id="cipherInputWrap">
+        <div class="field-group">
+          <input type="text" id="cipherInput" class="cipher-input" placeholder="••••" maxlength="4" autocomplete="off" autocorrect="off" autocapitalize="characters">
+        </div>
+        <button type="button" class="submit-btn" id="cipherSubmitBtn">Проверить шифр</button>
+        <div class="error-msg" id="cipherErrorMsg"></div>
+      </div>
+
+      <!-- Сцена анимации букв (появится после правильного ввода VELO) -->
+      <div class="anagram-stage" id="anagramStage">
+        <div class="letter-tile pos-0" id="tileV">V</div>
+        <div class="letter-tile pos-1" id="tileE">E</div>
+        <div class="letter-tile pos-2" id="tileL">L</div>
+        <div class="letter-tile pos-3" id="tileO">O</div>
+      </div>
+
+      <div class="success-text" id="successText">
+        «Всё это время буквы складывались только в одно...» ❤️
+      </div>
+    </div>
+  </div>
+
   <script>
     const VALID_LOGIN = "малышка";
     const VALID_PASSWORD = "2712";
+    const VALID_CIPHER = "VELO";
 
+    // Элементы экрана 1
     const authScreen = document.getElementById("auth-screen");
-    const questScreen = document.getElementById("questScreen");
     const card = document.getElementById("card");
     const loginInput = document.getElementById("login");
     const passInput = document.getElementById("password");
     const submitBtn = document.getElementById("submitBtn");
     const errorMsg = document.getElementById("errorMsg");
-
     const loginHintBtn = document.getElementById("loginHintBtn");
     const passHintBtn = document.getElementById("passHintBtn");
     const loginHint = document.getElementById("loginHint");
     const passHint = document.getElementById("passHint");
 
+    // Элементы экрана 2
+    const questScreen = document.getElementById("questScreen");
+    const questCard = document.getElementById("questCard");
+    const startQuestBtn = document.getElementById("startQuestBtn");
+    const lock = document.getElementById('goldLock');
+    const box = document.getElementById('jewelryBox');
+
+    // Элементы экрана 3
+    const taskScreen = document.getElementById("taskScreen");
+    const taskCard = document.getElementById("taskCard");
+    const cipherInput = document.getElementById("cipherInput");
+    const cipherSubmitBtn = document.getElementById("cipherSubmitBtn");
+    const cipherErrorMsg = document.getElementById("cipherErrorMsg");
+    const cipherInputWrap = document.getElementById("cipherInputWrap");
+    const anagramStage = document.getElementById("anagramStage");
+    const successText = document.getElementById("successText");
+
+    const tileV = document.getElementById("tileV");
+    const tileE = document.getElementById("tileE");
+    const tileL = document.getElementById("tileL");
+    const tileO = document.getElementById("tileO");
+
     // Раскрытие подсказок
     loginHintBtn.addEventListener("click", () => loginHint.classList.toggle("open"));
     passHintBtn.addEventListener("click", () => passHint.classList.toggle("open"));
 
-    // Проверка логина и пароля
+    // 1. Авторизация
     function attemptLogin() {
       const enteredLogin = loginInput.value.trim().toLowerCase();
       const enteredPassword = passInput.value.trim();
@@ -564,17 +746,17 @@
         loginInput.blur();
         passInput.blur();
 
-        authScreen.classList.add("fade-out");
+        card.classList.add("screen-fade-out");
 
         setTimeout(() => {
           authScreen.style.display = "none";
           questScreen.style.display = "flex";
+          questCard.classList.add("screen-fade-in");
         }, 500);
 
       } else {
         if (enteredLogin !== VALID_LOGIN) loginInput.classList.add("error");
         if (enteredPassword !== VALID_PASSWORD) passInput.classList.add("error");
-
         errorMsg.textContent = "Кажется, где-то закралась ошибка";
         card.classList.add("shake");
         setTimeout(() => card.classList.remove("shake"), 400);
@@ -586,13 +768,74 @@
       inp.addEventListener("keydown", (e) => { if (e.key === "Enter") attemptLogin(); });
     });
 
-    // Реакция на клик по шкатулке
-    const lock = document.getElementById('goldLock');
-    const box = document.getElementById('jewelryBox');
+    // Тряска замка шкатулки
     box.addEventListener('click', () => {
       lock.classList.remove('rattle');
       void lock.offsetWidth;
       lock.classList.add('rattle');
+    });
+
+    // 2. Переход от Шкатулки к Заданию 1
+    startQuestBtn.addEventListener("click", () => {
+      questCard.classList.add("screen-fade-out");
+
+      setTimeout(() => {
+        questScreen.style.display = "none";
+        taskScreen.style.display = "flex";
+        taskCard.classList.add("screen-fade-in");
+      }, 500);
+    });
+
+    // 3. Проверка шифра VELO и магия превращения в LOVE
+    function checkCipher() {
+      const enteredCipher = cipherInput.value.trim().toUpperCase();
+
+      cipherInput.classList.remove("error");
+      cipherErrorMsg.textContent = "";
+
+      if (enteredCipher === VALID_CIPHER) {
+        cipherInput.blur();
+        
+        // Плавно скрываем инпут и кнопку
+        cipherInputWrap.style.transition = "opacity 0.4s ease";
+        cipherInputWrap.style.opacity = "0";
+
+        setTimeout(() => {
+          cipherInputWrap.style.display = "none";
+          
+          // Показываем парящие буквы VELO
+          anagramStage.style.display = "flex";
+          anagramStage.classList.add("screen-fade-in");
+
+          // Пауза 1 секунда, чтобы она увидела свои введенные VELO
+          setTimeout(() => {
+            // Запуск плавной перестановки в LOVE:
+            tileL.classList.add("tile-love-l");
+            tileO.classList.add("tile-love-o");
+            tileV.classList.add("tile-love-v");
+            tileE.classList.add("tile-love-e");
+
+            // Зажигаем неоновое свечение LOVE
+            setTimeout(() => {
+              [tileV, tileE, tileL, tileO].forEach(t => t.classList.add("tile-glow"));
+              successText.style.display = "block";
+            }, 1100);
+
+          }, 1000);
+
+        }, 400);
+
+      } else {
+        cipherInput.classList.add("error");
+        cipherErrorMsg.textContent = "Неверно. Проверь буквы на страницах";
+        taskCard.classList.add("shake");
+        setTimeout(() => taskCard.classList.remove("shake"), 400);
+      }
+    }
+
+    cipherSubmitBtn.addEventListener("click", checkCipher);
+    cipherInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") checkCipher();
     });
   </script>
 </body>
