@@ -6,7 +6,7 @@
   <title>Only for you ✨</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #09090b;
@@ -86,7 +86,7 @@
       opacity: 0 !important;
       transform: scale(0.96) translateY(-10px) !important;
       pointer-events: none !important;
-      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
 
     .screen-fade-in {
@@ -303,29 +303,37 @@
 
     .box-stage {
       position: relative;
-      width: 200px;
-      height: 155px;
+      width: 220px;
+      height: 170px;
       margin: 0 auto 22px;
       display: flex;
       align-items: center;
       justify-content: center;
+      perspective: 800px;
     }
 
     .glow-pedestal {
       position: absolute;
       bottom: 6px;
-      width: 170px;
-      height: 30px;
+      width: 180px;
+      height: 32px;
       background: radial-gradient(ellipse at center, var(--pink-glow) 0%, transparent 70%);
       filter: blur(10px);
       z-index: 1;
+      transition: all 1s ease;
+    }
+
+    .glow-pedestal.active-glow {
+      background: radial-gradient(ellipse at center, rgba(255, 215, 0, 0.5) 0%, rgba(247, 168, 196, 0.4) 40%, transparent 75%);
+      filter: blur(16px);
+      transform: scale(1.3);
     }
 
     .jewelry-box {
       position: relative;
       z-index: 2;
       cursor: pointer;
-      transition: transform 0.2s ease;
+      transition: transform 0.3s ease;
     }
 
     .jewelry-box:active {
@@ -341,6 +349,13 @@
       position: relative;
       margin: 0 auto;
       z-index: 4;
+      transform-origin: top center;
+      transition: transform 1.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .box-lid.opened {
+      transform: rotateX(-115deg) translateY(-8px);
+      box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.4), 0 20px 30px rgba(0, 0, 0, 0.5);
     }
 
     .box-base {
@@ -354,6 +369,27 @@
       display: flex;
       justify-content: center;
       z-index: 3;
+      overflow: visible;
+    }
+
+    .box-inner-light {
+      position: absolute;
+      top: 0;
+      left: 10%;
+      width: 80%;
+      height: 10px;
+      background: #fff;
+      border-radius: 50%;
+      filter: blur(8px);
+      opacity: 0;
+      transition: all 1s ease;
+      z-index: 5;
+    }
+
+    .box-inner-light.burst {
+      opacity: 1;
+      box-shadow: 0 -20px 40px 15px rgba(255, 255, 255, 0.9),
+                  0 -40px 70px 30px rgba(255, 215, 0, 0.6);
     }
 
     .lid-ribbon, .base-ribbon {
@@ -374,6 +410,13 @@
       align-items: center;
       z-index: 10;
       filter: drop-shadow(0 4px 6px rgba(0,0,0,0.35));
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .gold-lock.unlock-drop {
+      transform: translateY(28px) scale(0.6) rotate(15deg);
+      opacity: 0;
+      pointer-events: none;
     }
 
     .lock-shackle {
@@ -383,6 +426,11 @@
       border-bottom: none;
       border-radius: 8px 8px 0 0;
       margin-bottom: -2px;
+      transition: transform 0.4s ease;
+    }
+
+    .lock-shackle.popped {
+      transform: translateY(-5px);
     }
 
     .lock-body {
@@ -431,7 +479,7 @@
       transition: all 0.2s ease;
     }
 
-    /* ---------------- 3. ЭКРАН ЗАДАНИЯ I (ШИФР И ДАТА) ---------------- */
+    /* ---------------- 3. ЭКРАН ЗАДАНИЯ I ---------------- */
     #taskScreen {
       display: none;
       position: relative;
@@ -607,7 +655,7 @@
       gap: 8px;
     }
 
-    /* ---------------- 4. ЭКРАН ЗАДАНИЯ II (ЗАГАДОЧНЫЙ ШИФР) ---------------- */
+    /* ---------------- 4. ЭКРАН ЗАДАНИЯ II ---------------- */
     #taskScreen2 {
       display: none;
       position: relative;
@@ -655,7 +703,6 @@
       letter-spacing: 1px;
     }
 
-    /* Подсказка, появляющаяся после первой ошибки */
     .hint-trigger-row {
       display: none;
       justify-content: center;
@@ -675,11 +722,6 @@
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      transition: all 0.2s ease;
-    }
-
-    .need-hint-btn:active {
-      transform: scale(0.96);
     }
 
     .stage2-hint-box {
@@ -718,10 +760,170 @@
       border-radius: 16px;
     }
 
-    .final-unlock-card {
+    /* ---------------- 5. КУЛЬМИНАЦИЯ: ТЕКСТ ЖЕЛАНИЯ ---------------- */
+    #confessionScreen {
       display: none;
-      margin-top: 18px;
-      animation: cardAppear 0.8s ease forwards;
+      position: fixed;
+      inset: 0;
+      z-index: 150;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 24px;
+      text-align: center;
+      background: radial-gradient(circle at center, #16121a 0%, #09090b 100%);
+    }
+
+    .confession-words-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px 14px;
+      max-width: 320px;
+      margin-bottom: 24px;
+    }
+
+    .reveal-word {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 500;
+      color: #ffffff;
+      opacity: 0;
+      transform: translateY(12px) scale(0.92);
+      transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      text-shadow: 0 0 20px rgba(247, 168, 196, 0.3);
+    }
+
+    .reveal-word.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .reveal-subline {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      font-style: italic;
+      color: #ffd7a8;
+      opacity: 0;
+      transform: translateY(15px);
+      transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+      text-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
+      max-width: 300px;
+      line-height: 1.5;
+    }
+
+    .reveal-subline.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---------------- 6. ФИНАЛЬНЫЙ ЭКРАН: ШКАТУЛКА И СВИТОК С ПРИЗОМ ---------------- */
+    #finalRevealScreen {
+      display: none;
+      position: relative;
+      z-index: 160;
+      padding: 20px;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .final-badge {
+      display: inline-block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #ffd700;
+      background: rgba(255, 215, 0, 0.1);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    /* Анимация бумажного свитка из шкатулки */
+    .scroll-wrapper {
+      margin-top: 20px;
+      display: none;
+      animation: scrollEmerge 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes scrollEmerge {
+      0% {
+        opacity: 0;
+        transform: translateY(35px) scale(0.85);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .parchment-card {
+      background: linear-gradient(135deg, #fbf7ee 0%, #f2e9d7 100%);
+      color: #2b2622;
+      border-radius: 18px;
+      padding: 24px 20px;
+      position: relative;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 0 30px rgba(210, 185, 140, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      text-align: center;
+    }
+
+    /* Имитация сургучной печати */
+    .wax-seal {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, #d32f2f 0%, #8b0000 100%);
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffcdd2;
+      font-size: 16px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), inset 0 2px 3px rgba(255, 255, 255, 0.4);
+    }
+
+    .scroll-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: #2b2622;
+      margin-bottom: 8px;
+    }
+
+    .scroll-body {
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: #574c43;
+      margin-bottom: 16px;
+    }
+
+    /* Блок с призом */
+    .prize-box {
+      background: rgba(0, 0, 0, 0.05);
+      border: 1px dashed rgba(139, 0, 0, 0.3);
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+
+    .prize-tag {
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #8b0000;
+      font-weight: 700;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .prize-content {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      color: #1a1614;
+      font-weight: 500;
     }
   </style>
 </head>
@@ -864,7 +1066,7 @@
     </div>
   </div>
 
-  <!-- 4. ЭКРАН ЗАДАНИЯ II (ЗАГАДОЧНЫЙ ШИФР БЕЗ ПРЯМЫХ ПОДСКАЗОК) -->
+  <!-- 4. ЭКРАН ЗАДАНИЯ II -->
   <div id="taskScreen2">
     <div class="glass-card" id="taskCard2" style="text-align: center;">
       <span class="quest-badge">Загадка II • Координаты</span>
@@ -873,42 +1075,21 @@
         Ключ спрятан в самом начале альбома... Попробуй разгадать, на что указывают эти цифры, и собери фразу:
       </p>
 
-      <!-- Лаконичные блоки только с цифрами -->
       <div class="coords-grid">
-        <div class="coord-card">
-          <span class="coord-index">I</span>
-          <span class="coord-val">3 : 1</span>
-        </div>
-        <div class="coord-card">
-          <span class="coord-index">II</span>
-          <span class="coord-val">6 : 7</span>
-        </div>
-        <div class="coord-card">
-          <span class="coord-index">III</span>
-          <span class="coord-val">4 : 8</span>
-        </div>
-        <div class="coord-card">
-          <span class="coord-index">IV</span>
-          <span class="coord-val">5 : 6</span>
-        </div>
-        <div class="coord-card">
-          <span class="coord-index">V</span>
-          <span class="coord-val">5 : 7</span>
-        </div>
-        <div class="coord-card">
-          <span class="coord-index">VI</span>
-          <span class="coord-val">5 : 8</span>
-        </div>
+        <div class="coord-card"><span class="coord-index">I</span><span class="coord-val">3 : 1</span></div>
+        <div class="coord-card"><span class="coord-index">II</span><span class="coord-val">6 : 7</span></div>
+        <div class="coord-card"><span class="coord-index">III</span><span class="coord-val">4 : 8</span></div>
+        <div class="coord-card"><span class="coord-index">IV</span><span class="coord-val">5 : 6</span></div>
+        <div class="coord-card"><span class="coord-index">V</span><span class="coord-val">5 : 7</span></div>
+        <div class="coord-card"><span class="coord-index">VI</span><span class="coord-val">5 : 8</span></div>
       </div>
 
-      <!-- Кнопка подсказки (появляется только после первой ошибки) -->
       <div class="hint-trigger-row" id="hintTriggerRow">
         <button type="button" class="need-hint-btn" id="stage2HintBtn">
           <span>💡</span> Нужна подсказка?
         </button>
       </div>
 
-      <!-- Раскрывающаяся подсказка -->
       <div class="stage2-hint-box" id="stage2HintBox">
         <p>Каждая пара цифр — это точные координаты в рукописном тексте: <b>номер строки : номер слова в строке</b>.</p>
       </div>
@@ -920,16 +1101,62 @@
         <button type="button" class="submit-btn" id="cipher2SubmitBtn">Открыть шкатулку</button>
         <div class="error-msg" id="cipher2ErrorMsg"></div>
       </div>
+    </div>
+  </div>
 
-      <!-- Финальная карточка победы -->
-      <div class="final-unlock-card" id="finalUnlockCard">
-        <p class="success-title">
-          «Все замки сброшены. Время открыть подарок...» ✨
-        </p>
-        <button type="button" class="next-step-btn" id="finalOpenBtn">
-          Открыть шкатулку и сделать фото 📸
-        </button>
+  <!-- 5. КУЛЬМИНАЦИЯ: ПОСЛЕДОВАТЕЛЬНОЕ ПОЯВЛЕНИЕ СЛОВ -->
+  <div id="confessionScreen">
+    <div class="confession-words-wrap">
+      <span class="reveal-word" id="rw1">хочу</span>
+      <span class="reveal-word" id="rw2">всегда</span>
+      <span class="reveal-word" id="rw3">быть</span>
+      <span class="reveal-word" id="rw4">рядом</span>
+      <span class="reveal-word" id="rw5">с</span>
+      <span class="reveal-word" id="rw6">тобой</span>
+    </div>
+    <div class="reveal-subline" id="rwSub">
+      — моё искреннее желание ✨
+    </div>
+  </div>
+
+  <!-- 6. ФИНАЛЬНЫЙ ЭКРАН: ШКАТУЛКА ОТКРЫВАЕТСЯ И ПОЯВЛЯЕТСЯ СВИТОК -->
+  <div id="finalRevealScreen">
+    <div class="glass-card" style="text-align: center;">
+      <span class="final-badge">Замок сброшен ✨</span>
+      <h2 class="quest-title" style="font-size: 24px; margin-bottom: 16px;">Шкатулка открыта</h2>
+
+      <div class="box-stage">
+        <div class="glow-pedestal" id="finalGlow"></div>
+        <div class="jewelry-box">
+          <div class="box-lid" id="finalLid"><div class="lid-ribbon"></div></div>
+          <div class="box-base">
+            <div class="box-inner-light" id="boxLight"></div>
+            <div class="base-ribbon"></div>
+            <div class="gold-lock" id="finalLock">
+              <div class="lock-shackle" id="finalShackle"></div>
+              <div class="lock-body"><div class="keyhole"></div></div>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <!-- Свиток бумаги, выплывающий из шкатулки -->
+      <div class="scroll-wrapper" id="scrollWrapper">
+        <div class="parchment-card">
+          <div class="wax-seal">💌</div>
+          <h3 class="scroll-title">Ты справилась, Малышка!</h3>
+          <p class="scroll-body">
+            Поздравляю тебя с успешным прохождением квеста! Все шифры разгаданы, замки пали, и ты доказала, что помнишь каждую важную деталь нашей истории ❤️
+          </p>
+          <div class="prize-box">
+            <span class="prize-tag">Твой главный приз</span>
+            <div class="prize-content" id="prizeText">
+              ✨ Твой секретный подарок ждёт тебя у меня... (или впиши сюда свой приз) ✨
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -951,7 +1178,7 @@
     const loginHint = document.getElementById("loginHint");
     const passHint = document.getElementById("passHint");
 
-    // Шкатулка
+    // Шкатулка (Экран 2)
     const questScreen = document.getElementById("questScreen");
     const questCard = document.getElementById("questCard");
     const startQuestBtn = document.getElementById("startQuestBtn");
@@ -990,13 +1217,19 @@
     const cipher2Input = document.getElementById("cipher2Input");
     const cipher2SubmitBtn = document.getElementById("cipher2SubmitBtn");
     const cipher2ErrorMsg = document.getElementById("cipher2ErrorMsg");
-    const cipher2InputWrap = document.getElementById("cipher2InputWrap");
-    const finalUnlockCard = document.getElementById("finalUnlockCard");
-    const finalOpenBtn = document.getElementById("finalOpenBtn");
-
     const hintTriggerRow = document.getElementById("hintTriggerRow");
     const stage2HintBtn = document.getElementById("stage2HintBtn");
     const stage2HintBox = document.getElementById("stage2HintBox");
+
+    // Экраны кульминации
+    const confessionScreen = document.getElementById("confessionScreen");
+    const finalRevealScreen = document.getElementById("finalRevealScreen");
+    const finalLock = document.getElementById("finalLock");
+    const finalShackle = document.getElementById("finalShackle");
+    const finalLid = document.getElementById("finalLid");
+    const boxLight = document.getElementById("boxLight");
+    const finalGlow = document.getElementById("finalGlow");
+    const scrollWrapper = document.getElementById("scrollWrapper");
 
     let stage2Mistakes = 0;
 
@@ -1117,11 +1350,11 @@
       }, 500);
     });
 
-    // Управление подсказкой 2-го этапа
     stage2HintBtn.addEventListener("click", () => {
       stage2HintBox.classList.toggle("open");
     });
 
+    // Кульминация после разгадки фразы
     function checkCipher2() {
       const enteredWord = cipher2Input.value.trim().toUpperCase().replace(/Ё/g, 'Е').replace(/[^А-ЯA-Z]/g, '');
       const cleanTarget = VALID_CIPHER_2.toUpperCase().replace(/Ё/g, 'Е').replace(/[^А-ЯA-Z]/g, '');
@@ -1131,19 +1364,73 @@
 
       if (enteredWord === cleanTarget) {
         cipher2Input.blur();
-        cipher2InputWrap.style.transition = "opacity 0.4s ease";
-        cipher2InputWrap.style.opacity = "0";
-        hintTriggerRow.style.display = "none";
-        stage2HintBox.style.display = "none";
+
+        // 1. Экран плавно растворяется
+        taskCard2.classList.add("screen-fade-out");
 
         setTimeout(() => {
-          cipher2InputWrap.style.display = "none";
-          document.querySelectorAll("#taskScreen2 .coord-card").forEach(c => {
-            c.style.borderColor = "#ffd700";
-            c.style.boxShadow = "0 0 15px rgba(255, 215, 0, 0.25)";
+          taskScreen2.style.display = "none";
+
+          // 2. Экран с последовательным проявлением слов
+          confessionScreen.style.display = "flex";
+
+          const words = [
+            document.getElementById("rw1"),
+            document.getElementById("rw2"),
+            document.getElementById("rw3"),
+            document.getElementById("rw4"),
+            document.getElementById("rw5"),
+            document.getElementById("rw6")
+          ];
+
+          words.forEach((w, idx) => {
+            setTimeout(() => {
+              w.classList.add("visible");
+            }, 300 + idx * 450);
           });
-          finalUnlockCard.style.display = "block";
-        }, 400);
+
+          setTimeout(() => {
+            document.getElementById("rwSub").classList.add("visible");
+          }, 300 + words.length * 450 + 400);
+
+          // 3. Через 5.8 секунд слова растворяются и появляется шкатулка
+          setTimeout(() => {
+            confessionScreen.style.transition = "opacity 0.8s ease";
+            confessionScreen.style.opacity = "0";
+
+            setTimeout(() => {
+              confessionScreen.style.display = "none";
+              finalRevealScreen.style.display = "flex";
+              finalRevealScreen.classList.add("screen-fade-in");
+
+              // 4. Замок отщелкивается, падает и шкатулка открывается
+              setTimeout(() => {
+                finalShackle.classList.add("popped");
+
+                setTimeout(() => {
+                  finalLock.classList.add("unlock-drop");
+
+                  setTimeout(() => {
+                    finalLid.classList.add("opened");
+                    boxLight.classList.add("burst");
+                    finalGlow.classList.add("active-glow");
+
+                    // 5. Из открытой шкатулки поднимается свиток
+                    setTimeout(() => {
+                      scrollWrapper.style.display = "block";
+                    }, 1000);
+
+                  }, 500);
+
+                }, 400);
+
+              }, 800);
+
+            }, 800);
+
+          }, 5800);
+
+        }, 600);
 
       } else {
         stage2Mistakes++;
@@ -1152,7 +1439,6 @@
         taskCard2.classList.add("shake");
         setTimeout(() => taskCard2.classList.remove("shake"), 400);
 
-        // После первой же ошибки открываем доступ к кнопке подсказки
         if (stage2Mistakes >= 1) {
           hintTriggerRow.style.display = "flex";
         }
@@ -1162,10 +1448,6 @@
     cipher2SubmitBtn.addEventListener("click", checkCipher2);
     cipher2Input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") checkCipher2();
-    });
-
-    finalOpenBtn.addEventListener("click", () => {
-      console.log("Шкатулка распахивается, выезжает камера моментальной печати!");
     });
   </script>
 </body>
