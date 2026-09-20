@@ -714,7 +714,7 @@
         <input type="password" id="password" inputmode="numeric" placeholder="••••" autocomplete="off">
       </div>
 
-      <button type="button" class="submit-btn" id="submitBtn">Открыть наш мир</button>
+      <button type="button" class="submit-btn" id="submitBtn">Вход</button>
       <div class="error-msg" id="errorMsg"></div>
     </div>
   </div>
@@ -722,7 +722,7 @@
   <!-- 2. ЭКРАН ШКАТУЛКИ -->
   <div id="questScreen">
     <div class="glass-card" id="questCard" style="text-align: center;">
-      <span class="quest-badge">Уровень I • Квест памяти</span>
+      <span class="quest-badge">Этап I • Хранилище воспоминаний</span>
       <h2 class="quest-title">Шкатулка с секретом</h2>
       <p class="quest-description">
         Внутри спрятано то, что бережно собиралось все эти полгода. Но механизм защищён шифрами, ответы на которые знаешь только ты.
@@ -759,9 +759,9 @@
   <div id="taskScreen">
     <div class="glass-card" id="taskCard" style="text-align: center;">
       <span class="quest-badge" id="taskBadge">Загадка I • Послание в страницах</span>
-      <h2 class="quest-title" id="taskHeading">Шифр дневника</h2>
+      <h2 class="quest-title" id="taskHeading">ШИФР АЛЬБОМА</h2>
       <p class="quest-description" id="taskDesc">
-        Загляни в свой дневник. На указанных страницах тебя ждут спрятанные символы. Найди их и введи полученное слово:
+        Загляни в свой альбом. На указанных страницах тебя ждут спрятанные символы. Найди их и введи полученное слово:
       </p>
 
       <div class="number-stage">
@@ -805,7 +805,7 @@
           «25.03.2023 — день, когда всё началось...» ❤️
         </p>
         <button type="button" class="next-step-btn" id="goToTask2Btn">
-          Перейти ко второму шифру
+          Перейти ко второму этапу
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
@@ -820,10 +820,10 @@
       <span class="quest-badge">Загадка II • Координаты строк</span>
       <h2 class="quest-title">Тайные строки</h2>
       <p class="quest-description">
-        В дневнике написан текст. Найди нужные слова по их координатам <i>(номер строки • номер слова в строке)</i>, чтобы собрать ключ:
+        Найди ключ — он спрятан в самом начале, там, где начинаются строки... Собери его по координатам <i>(номер строки • номер слова в ней)</i>:
       </p>
 
-      <!-- 6 координат из текста дневника -->
+      <!-- 6 координат из текста в начале альбома -->
       <div class="coords-grid">
         <div class="coord-card">
           <span class="coord-index">Слово 1</span>
@@ -1046,7 +1046,6 @@
       if (e.key === "Enter") checkCipher();
     });
 
-    // Переход от Задания 1 к Заданию 2
     goToTask2Btn.addEventListener("click", () => {
       taskCard.classList.add("screen-fade-out");
       setTimeout(() => {
@@ -1056,9 +1055,7 @@
       }, 500);
     });
 
-    // Проверка второго книжного шифра
     function checkCipher2() {
-      // Очищаем от пробелов, знаков препинания и приводим Ё к Е
       const enteredWord = cipher2Input.value.trim().toUpperCase().replace(/Ё/g, 'Е').replace(/[^А-ЯA-Z]/g, '');
       const cleanTarget = VALID_CIPHER_2.toUpperCase().replace(/Ё/g, 'Е').replace(/[^А-ЯA-Z]/g, '');
 
@@ -1092,7 +1089,6 @@
       if (e.key === "Enter") checkCipher2();
     });
 
-    // Финал: переход к распахивающейся шкатулке и фотокамере
     finalOpenBtn.addEventListener("click", () => {
       console.log("Шкатулка распахивается, выезжает камера моментальной печати!");
     });
