@@ -431,7 +431,7 @@
       transition: all 0.2s ease;
     }
 
-    /* ---------------- 3. ЭКРАН ЗАДАНИЯ ---------------- */
+    /* ---------------- 3. ЭКРАН ЗАДАНИЯ I (ШИФР И ДАТА) ---------------- */
     #taskScreen {
       display: none;
       position: relative;
@@ -601,6 +601,77 @@
       font-weight: 600;
       cursor: pointer;
       box-shadow: 0 10px 25px -4px rgba(234, 122, 159, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    /* ---------------- 4. ЭКРАН ЗАДАНИЯ II (КНИЖНЫЙ ШИФР) ---------------- */
+    #taskScreen2 {
+      display: none;
+      position: relative;
+      z-index: 10;
+      padding: 20px;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .coords-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 18px 0 22px;
+    }
+
+    .coord-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(247, 168, 196, 0.25);
+      border-radius: 14px;
+      padding: 10px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      box-shadow: inset 0 1px 2px rgba(255,255,255,0.06);
+      transition: all 0.4s ease;
+    }
+
+    .coord-index {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .coord-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .coord-sub {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .word-input {
+      text-align: center;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      height: 52px;
+      border-radius: 16px;
+    }
+
+    .final-unlock-card {
+      display: none;
+      margin-top: 18px;
+      animation: cardAppear 0.8s ease forwards;
     }
   </style>
 </head>
@@ -684,7 +755,7 @@
     </div>
   </div>
 
-  <!-- 3. ЭКРАН ЗАДАНИЯ -->
+  <!-- 3. ЭКРАН ЗАДАНИЯ I (ШИФР И ДАТА) -->
   <div id="taskScreen">
     <div class="glass-card" id="taskCard" style="text-align: center;">
       <span class="quest-badge" id="taskBadge">Загадка I • Послание в страницах</span>
@@ -733,7 +804,75 @@
         <p class="success-title">
           «25.03.2023 — день, когда всё началось...» ❤️
         </p>
-        <button type="button" class="next-step-btn" id="openBoxBtn">Снять замок со шкатулки ✨</button>
+        <button type="button" class="next-step-btn" id="goToTask2Btn">
+          Перейти ко второму шифру
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. ЭКРАН ЗАДАНИЯ II (КНИЖНЫЙ ШИФР: СТРОКА / СЛОВО) -->
+  <div id="taskScreen2">
+    <div class="glass-card" id="taskCard2" style="text-align: center;">
+      <span class="quest-badge">Загадка II • Координаты строк</span>
+      <h2 class="quest-title">Тайные строки</h2>
+      <p class="quest-description">
+        В дневнике написан текст. Найди нужные слова по их координатам <i>(номер строки • номер слова в строке)</i>, чтобы собрать ключ:
+      </p>
+
+      <!-- 6 координат из текста дневника -->
+      <div class="coords-grid">
+        <div class="coord-card">
+          <span class="coord-index">Слово 1</span>
+          <span class="coord-val">Стрк. 3</span>
+          <span class="coord-sub">сл. 1</span>
+        </div>
+        <div class="coord-card">
+          <span class="coord-index">Слово 2</span>
+          <span class="coord-val">Стрк. 6</span>
+          <span class="coord-sub">сл. 7</span>
+        </div>
+        <div class="coord-card">
+          <span class="coord-index">Слово 3</span>
+          <span class="coord-val">Стрк. 4</span>
+          <span class="coord-sub">сл. 8</span>
+        </div>
+        <div class="coord-card">
+          <span class="coord-index">Слово 4</span>
+          <span class="coord-val">Стрк. 5</span>
+          <span class="coord-sub">сл. 6</span>
+        </div>
+        <div class="coord-card">
+          <span class="coord-index">Слово 5</span>
+          <span class="coord-val">Стрк. 5</span>
+          <span class="coord-sub">сл. 7</span>
+        </div>
+        <div class="coord-card">
+          <span class="coord-index">Слово 6</span>
+          <span class="coord-val">Стрк. 5</span>
+          <span class="coord-sub">сл. 8</span>
+        </div>
+      </div>
+
+      <div id="cipher2InputWrap">
+        <div class="field-group">
+          <input type="text" id="cipher2Input" class="word-input" placeholder="Введи полученную фразу..." autocomplete="off" autocorrect="off">
+        </div>
+        <button type="button" class="submit-btn" id="cipher2SubmitBtn">Открыть шкатулку</button>
+        <div class="error-msg" id="cipher2ErrorMsg"></div>
+      </div>
+
+      <!-- Финальная карточка победы -->
+      <div class="final-unlock-card" id="finalUnlockCard">
+        <p class="success-title">
+          «Все замки сброшены. Время открыть подарок...» ✨
+        </p>
+        <button type="button" class="next-step-btn" id="finalOpenBtn">
+          Открыть шкатулку и сделать фото 📸
+        </button>
       </div>
     </div>
   </div>
@@ -742,6 +881,7 @@
     const VALID_LOGIN = "малышка";
     const VALID_PASSWORD = "2712";
     const VALID_CIPHER = "VELO";
+    const VALID_CIPHER_2 = "ХОЧУ ВСЕГДА БЫТЬ РЯДОМ С ТОБОЙ";
 
     // Авторизация
     const authScreen = document.getElementById("auth-screen");
@@ -762,21 +902,20 @@
     const lock = document.getElementById('goldLock');
     const box = document.getElementById('jewelryBox');
 
-    // Задание
+    // Задание 1
     const taskScreen = document.getElementById("taskScreen");
     const taskCard = document.getElementById("taskCard");
     const taskBadge = document.getElementById("taskBadge");
     const taskHeading = document.getElementById("taskHeading");
     const taskDesc = document.getElementById("taskDesc");
-
     const cipherInput = document.getElementById("cipherInput");
     const cipherSubmitBtn = document.getElementById("cipherSubmitBtn");
     const cipherErrorMsg = document.getElementById("cipherErrorMsg");
     const cipherInputWrap = document.getElementById("cipherInputWrap");
     const anagramStage = document.getElementById("anagramStage");
     const successBlock = document.getElementById("successBlock");
+    const goToTask2Btn = document.getElementById("goToTask2Btn");
 
-    // Числа даты
     const num20 = document.getElementById("num20");
     const num23 = document.getElementById("num23");
     const num25 = document.getElementById("num25");
@@ -784,11 +923,20 @@
     const dot1 = document.getElementById("dot1");
     const dot2 = document.getElementById("dot2");
 
-    // Буквы
     const tileV = document.getElementById("tileV");
     const tileE = document.getElementById("tileE");
     const tileL = document.getElementById("tileL");
     const tileO = document.getElementById("tileO");
+
+    // Задание 2
+    const taskScreen2 = document.getElementById("taskScreen2");
+    const taskCard2 = document.getElementById("taskCard2");
+    const cipher2Input = document.getElementById("cipher2Input");
+    const cipher2SubmitBtn = document.getElementById("cipher2SubmitBtn");
+    const cipher2ErrorMsg = document.getElementById("cipher2ErrorMsg");
+    const cipher2InputWrap = document.getElementById("cipher2InputWrap");
+    const finalUnlockCard = document.getElementById("finalUnlockCard");
+    const finalOpenBtn = document.getElementById("finalOpenBtn");
 
     loginHintBtn.addEventListener("click", () => loginHint.classList.toggle("open"));
     passHintBtn.addEventListener("click", () => passHint.classList.toggle("open"));
@@ -834,7 +982,6 @@
 
     startQuestBtn.addEventListener("click", () => {
       questCard.classList.add("screen-fade-out");
-
       setTimeout(() => {
         questScreen.style.display = "none";
         taskScreen.style.display = "flex";
@@ -844,19 +991,16 @@
 
     function checkCipher() {
       const enteredCipher = cipherInput.value.trim().toUpperCase();
-
       cipherInput.classList.remove("error");
       cipherErrorMsg.textContent = "";
 
       if (enteredCipher === VALID_CIPHER) {
         cipherInput.blur();
-        
         cipherInputWrap.style.transition = "opacity 0.4s ease";
         cipherInputWrap.style.opacity = "0";
 
         setTimeout(() => {
           cipherInputWrap.style.display = "none";
-          
           anagramStage.style.display = "flex";
           anagramStage.classList.add("screen-fade-in");
 
@@ -879,9 +1023,9 @@
               [num20, num23, num25, num03].forEach(n => n.classList.add("date-glow"));
               [tileV, tileE, tileL, tileO].forEach(t => t.classList.add("tile-glow"));
 
-              taskBadge.textContent = "Замок открыт ✨";
+              taskBadge.textContent = "Первый ключ найден ✨";
               taskHeading.textContent = "Наша дата и наше слово";
-              taskDesc.textContent = "Шифр разгадан полностью:";
+              taskDesc.textContent = "Первый замок сброшен:";
               successBlock.style.display = "block";
             }, 1200);
 
@@ -902,8 +1046,55 @@
       if (e.key === "Enter") checkCipher();
     });
 
-    document.getElementById("openBoxBtn").addEventListener("click", () => {
-      console.log("Переход к открытой шкатулке и фотокамере!");
+    // Переход от Задания 1 к Заданию 2
+    goToTask2Btn.addEventListener("click", () => {
+      taskCard.classList.add("screen-fade-out");
+      setTimeout(() => {
+        taskScreen.style.display = "none";
+        taskScreen2.style.display = "flex";
+        taskCard2.classList.add("screen-fade-in");
+      }, 500);
+    });
+
+    // Проверка второго книжного шифра
+    function checkCipher2() {
+      // Очищаем от пробелов, знаков препинания и приводим Ё к Е
+      const enteredWord = cipher2Input.value.trim().toUpperCase().replace(/Ё/g, 'Е').replace(/[^А-ЯA-Z]/g, '');
+      const cleanTarget = VALID_CIPHER_2.toUpperCase().replace(/Ё/g, 'Е').replace(/[^А-ЯA-Z]/g, '');
+
+      cipher2Input.classList.remove("error");
+      cipher2ErrorMsg.textContent = "";
+
+      if (enteredWord === cleanTarget) {
+        cipher2Input.blur();
+        cipher2InputWrap.style.transition = "opacity 0.4s ease";
+        cipher2InputWrap.style.opacity = "0";
+
+        setTimeout(() => {
+          cipher2InputWrap.style.display = "none";
+          document.querySelectorAll(".coord-card").forEach(c => {
+            c.style.borderColor = "#ffd700";
+            c.style.boxShadow = "0 0 15px rgba(255, 215, 0, 0.25)";
+          });
+          finalUnlockCard.style.display = "block";
+        }, 400);
+
+      } else {
+        cipher2Input.classList.add("error");
+        cipher2ErrorMsg.textContent = "Не совпадает. Проверь номер строки и слова";
+        taskCard2.classList.add("shake");
+        setTimeout(() => taskCard2.classList.remove("shake"), 400);
+      }
+    }
+
+    cipher2SubmitBtn.addEventListener("click", checkCipher2);
+    cipher2Input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") checkCipher2();
+    });
+
+    // Финал: переход к распахивающейся шкатулке и фотокамере
+    finalOpenBtn.addEventListener("click", () => {
+      console.log("Шкатулка распахивается, выезжает камера моментальной печати!");
     });
   </script>
 </body>
