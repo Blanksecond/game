@@ -901,9 +901,9 @@
 
     .prize-box {
       background: rgba(0, 0, 0, 0.05);
-      border: 1px dashed rgba(139, 0, 0, 0.3);
-      border-radius: 12px;
-      padding: 12px 14px;
+      border: 1px dashed rgba(139, 0, 0, 0.35);
+      border-radius: 14px;
+      padding: 14px 16px;
     }
 
     .prize-tag {
@@ -913,14 +913,22 @@
       color: #8b0000;
       font-weight: 700;
       display: block;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
     .prize-content {
       font-family: 'Playfair Display', serif;
-      font-size: 15px;
+      font-size: 17px;
       color: #1a1614;
-      font-weight: 500;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .prize-note {
+      font-size: 11.5px;
+      color: #7a6a5d;
+      margin-top: 6px;
+      font-style: italic;
     }
   </style>
 </head>
@@ -1072,7 +1080,7 @@
         Ключ спрятан в самом начале альбома... Попробуй разгадать, на что указывают эти цифры, и собери фразу:
       </p>
 
-      <!-- Координаты строк и слов под узкие строки -->
+      <!-- Актуальные координаты под 16 строк -->
       <div class="coords-grid">
         <div class="coord-card"><span class="coord-index">I</span><span class="coord-val">6 : 1</span></div>
         <div class="coord-card"><span class="coord-index">II</span><span class="coord-val">14 : 4</span></div>
@@ -1102,7 +1110,7 @@
     </div>
   </div>
 
-  <!-- 5. КУЛЬМИНАЦИЯ: ПОСЛЕДОВАТЕЛЬНОЕ ПОЯВЛЕНИЕ СЛОВ -->
+  <!-- 5. КУЛЬМИНАЦИЯ: ТЕКСТ ЖЕЛАНИЯ -->
   <div id="confessionScreen">
     <div class="confession-words-wrap">
       <span class="reveal-word" id="rw1">хочу</span>
@@ -1117,7 +1125,7 @@
     </div>
   </div>
 
-  <!-- 6. ФИНАЛЬНЫЙ ЭКРАН: ШКАТУЛКА ОТКРЫВАЕТСЯ И ПОЯВЛЯЕТСЯ СВИТОК -->
+  <!-- 6. ФИНАЛЬНЫЙ ЭКРАН: ШКАТУЛКА И СВИТОК С ПРИЗОМ -->
   <div id="finalRevealScreen">
     <div class="glass-card" style="text-align: center;">
       <span class="final-badge">Замок сброшен ✨</span>
@@ -1138,17 +1146,21 @@
         </div>
       </div>
 
+      <!-- Свиток с призом-желанием -->
       <div class="scroll-wrapper" id="scrollWrapper">
         <div class="parchment-card">
           <div class="wax-seal">💌</div>
-          <h3 class="scroll-title">Ты справилась, Малышка!</h3>
+          <h3 class="scroll-title">Ты справилась, Малышечка!</h3>
           <p class="scroll-body">
-            Поздравляю тебя с успешным прохождением квеста! Все шифры разгаданы, замки пали, и ты доказала, что помнишь каждую важную деталь нашей истории ❤️
+            Все шифры разгаданы, замки пали, и ты доказала, что помнишь каждую важную деталь нашей истории ❤️
           </p>
           <div class="prize-box">
             <span class="prize-tag">Твой главный приз</span>
             <div class="prize-content" id="prizeText">
-              ✨ Твой секретный подарок ждёт тебя у меня... (или впиши сюда свой приз) ✨
+              ✨ Я выполню твоё одно любое желание ✨
+            </div>
+            <div class="prize-note">
+              (купон бессрочный и обязателен к исполнению в любой момент)
             </div>
           </div>
         </div>
@@ -1158,7 +1170,8 @@
   </div>
 
   <script>
-    const VALID_LOGIN = "малышка";
+    // ---------------- ДАННЫЕ АВТОРИЗАЦИИ И ШИФРОВ ----------------
+    const VALID_LOGIN = "малышечка";
     const VALID_PASSWORD = "2712";
     const VALID_CIPHER = "VELO";
     const VALID_CIPHER_2 = "ХОЧУ ВСЕГДА БЫТЬ РЯДОМ С ТОБОЙ";
